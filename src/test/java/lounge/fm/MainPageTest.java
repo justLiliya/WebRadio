@@ -24,7 +24,7 @@ public class MainPageTest {
     }
 
     @Test
-    public void CheckHederMainPage() {
+    public void checkHederMainPageTest() {
         open("http://loungefm.com.ua/");
         $("#index").shouldHave(text("Lounge Fm"));
         $("#terrace").shouldHave(text("Terrace"));
@@ -49,7 +49,7 @@ public class MainPageTest {
             "3, http://loungefm.com.ua/timo"
     })
     @ParameterizedTest(name = " Проверка перехода по пунктам выпадающего меню Радиошоу {0}")
-    public void CheckTransitionsInDropdownMenuItems(String arrayNumber, String testdata) {
+    public void checkTransitionsInDropdownMenuItemsTest(String arrayNumber, String testdata) {
         open("http://loungefm.com.ua/");
         $("#navbarDropdown").shouldHave(text("Radioshow")).click();
         ElementsCollection a = $$x("//a[@class='dropdown-item']");
@@ -58,19 +58,21 @@ public class MainPageTest {
     }
 
 
-    static Stream<Arguments> goToTheAppsStore() {
+    static Stream<Arguments> goToTheAppsStoreTest() {
         return Stream.of(
-                Arguments.of((".//a[@title='Официальное приложение Lounge FM для Android']"),
-                        Arguments.of(".//a[@title='Официальное приложение Lounge FM для iOS']")
-                ));
+                Arguments.of("'Официальная группа в Facebook'"),
+                Arguments.of("'Официальная страница в Instagram'")
+        );
     }
 
     @MethodSource
-    @ParameterizedTest(name = "Переход в аппстор - {0}")
-    public void goToTheAppsStore(String buttons) {
+    @ParameterizedTest(name = "Переход в аппстор заблокирован - {0}")
+    public void goToTheAppsStoreTest(String buttons) {
         open("http://loungefm.com.ua/");
-        $x(buttons).click();
+        $x(".//a[@title=" + buttons + "]").click();
         switchTo().window(1);
+        $x("//h1/span").shouldHave(text("Не удается получить доступ к сайту"));
+        closeWindow();
     }
 }
 
